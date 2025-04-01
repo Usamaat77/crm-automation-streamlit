@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Details - Payment Automation Tool{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Back to Dashboard
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Payment #{{ payment.id }}</h5>
+                <span class="badge badge-{{ payment.status }}">{{ payment.status.capitalize() }}</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Invoice Information</h6>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Invoice Number</span>
+                                <span>{{ payment.invoice_number or 'Unknown' }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Amount</span>
+                                <span>{% if payment.amount %}${{ "%.2f"|format(payment.amount) }}{% else %}Unknown{% endif %}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Payment Date</span>
+                                <span>{{ payment.payment_date or 'Unknown' }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Client Email</span>
+                                <span>{{ payment.client_email or 'Unknown' }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Processing Status</h6>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Uploaded</span>
+                                <span>{{ payment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Verified</span>
+                                <span>{% if payment.verification_date %}{{ payment.verification_date.strftime('%Y-%m-%d %H:%M') }}{% else %}-{% endif %}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>CRM Updated</span>
+                                <span>{% if payment.crm_update_date %}{{ payment.crm_update_date.strftime('%Y-%m-%d %H:%M') }}{% else %}-{% endif %}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Email Sent</span>
+                                <span>{% if payment.email_sent_date %}{{ payment.email_sent_date.strftime('%Y-%m-%d %H:%M') }}{% else %}-{% endif %}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h6>Payment Screenshot</h6>
+                <div class="text-center mb-4">
+                    {% if payment.screenshot_path %}
+                    <img src="{{ url_for('uploaded_file', filename=payment.screenshot_path.split('/')[-1]) }}" class="img-payment" alt="Payment Screenshot">
+                    {% else %}
+                    <div class="alert alert-warning">No screenshot available</div>
+                    {% endif %}
+                </div>
+
+                <h6>Extracted Text</h6>
+                <div class="p-3 mb-4 bg-body-tertiary rounded">
+                    {% if payment.raw_text %}
+                    <pre class="mb-0"><code>{{ payment.raw_text }}</code></pre>
+                    {% else %}
+                    <div class="alert alert-warning">No text extracted</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if payment.status == 'pending' %}
+                    <a href="{{ url_for('verify_payment', payment_id=payment.id) }}" class="btn btn-success">Verify Payment</a>
+                    {% elif payment.status == 'verified' %}
+                    <a href="{{ url_for('update_crm', payment_id=payment.id) }}" class="btn btn-primary">Update CRM</a>
+                    {% elif payment.status == 'processed' %}
+                    <a href="{{ url_for('send_email', payment_id=payment.id) }}" class="btn btn-info">Send Email Notification</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Activity Log</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% if payment.logs %}
+                    {% for log in payment.logs|sort(attribute='timestamp', reverse=True) %}
+                    <div class="log-entry log-{{ log.level }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <strong>{{ log.level }}</strong>
+                            <small>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                        </div>
+                        <div>{{ log.message }}</div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="list-group-item">No activity logs available</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if payment.status == 'processed' or payment.status == 'notified' %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Invoice</h5>
+            </div>
+            <div class="card-body">
+                {% if payment.invoice_path %}
+                <p>Invoice has been retrieved from the CRM system.</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('download_invoice', payment_id=payment.id) }}" class="btn btn-outline-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                            <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
+                        </svg>
+                        Download Invoice
+                    </a>
+                </div>
+                {% else %}
+                <div class="alert alert-warning">No invoice available</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

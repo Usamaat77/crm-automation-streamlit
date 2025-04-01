@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Automation Ready</h4>
+            <span class="badge bg-success">Ready to Run</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <h5 class="alert-heading">Download and Run Locally</h5>
+            <p>This automation needs to be run on your local computer where you have Chrome and your CRM session active.</p>
+            <hr>
+            <p class="mb-0">Follow the instructions below to download and run the automation tool.</p>
+        </div>
+        
+        <div class="mt-4">
+            <h5>Step 1: Download the Automation Tool</h5>
+            <p>Download the complete automation tool package and extract it to a folder on your computer.</p>
+            <a href="/generate-package" class="btn btn-primary">Download Complete Package</a>
+        </div>
+        
+        <div class="mt-4">
+            <h5>Step 2: Install Required Packages</h5>
+            <div class="bg-dark text-light p-3 rounded">
+                <code>pip install -r requirements-local.txt</code>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h5>Step 3: Run the Automation Command</h5>
+            <p>Copy and run the following command in a terminal window from the extracted folder:</p>
+            <div class="bg-dark text-light p-3 rounded position-relative">
+                <pre class="mb-0"><code>{{ command }}</code></pre>
+                <button class="btn btn-sm btn-outline-light position-absolute top-0 end-0 m-2" 
+                        onclick="copyToClipboard('{{ command }}')">
+                    Copy
+                </button>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning mt-4">
+            <h5 class="alert-heading">Important!</h5>
+            <ul class="mb-0">
+                <li>Ensure you're logged into your CRM in Chrome before running the automation</li>
+                <li>Keep the Chrome window visible during automation if not using headless mode</li>
+                <li>Check the automation.log file for details of the process</li>
+            </ul>
+        </div>
+        
+        <div class="mt-4">
+            <a href="/prepare_automation" class="btn btn-outline-secondary">Back to Settings</a>
+            <a href="/" class="btn btn-outline-primary">Return to Home</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    
+    alert('Command copied to clipboard!');
+}
+</script>
+{% endblock %}

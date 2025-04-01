@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Package Created Successfully!</h4>
+                <p>Your Excel to CRM Automation package has been created successfully.</p>
+                <hr>
+                <p class="mb-0">Click the button below to download the package.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Excel to CRM Automation Package</h5>
+                    <p class="card-text">The package contains all the necessary files to run the automation tool on your local computer.</p>
+                    <a href="/download-file/{{ filename }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-download"></i> Download Package
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Installation Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Download the package using the button above</li>
+                        <li>Extract the ZIP file to a folder on your computer</li>
+                        <li>Install the required dependencies:
+                            <pre class="bg-dark text-light p-2 mt-2"><code>pip install -r requirements-local.txt</code></pre>
+                        </li>
+                        <li>Run the application:
+                            <pre class="bg-dark text-light p-2 mt-2"><code>python run.py</code></pre>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="/" class="btn btn-outline-secondary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

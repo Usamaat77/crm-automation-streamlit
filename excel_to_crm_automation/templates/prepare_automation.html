@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Prepare Automation</h4>
+            <span class="badge bg-primary">Step 4 of 4</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>Configure the automation settings before running.</p>
+        
+        <form action="/prepare_automation" method="post" class="mt-4">
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="headless" name="headless">
+                <label class="form-check-label" for="headless">Run in Headless Mode</label>
+                <div class="form-text">When enabled, the browser will run in the background without a visible window</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="delay" class="form-label">Action Delay (seconds)</label>
+                <input type="number" class="form-control" id="delay" name="delay" min="0.1" max="10" step="0.1" value="1.0">
+                <div class="form-text">Delay between actions in seconds (higher values for slower connections)</div>
+            </div>
+            
+            <div class="alert alert-warning">
+                <h5 class="alert-heading">Before Running the Automation:</h5>
+                <ul class="mb-0">
+                    <li>Make sure you are already logged into the CRM system in a Chrome browser</li>
+                    <li>Close any other unnecessary Chrome windows</li>
+                    <li>Ensure your Excel data matches the expected format in the CRM</li>
+                </ul>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Generate Command</button>
+            <a href="/map_columns" class="btn btn-outline-secondary">Back</a>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">Automation Process</h4>
+    </div>
+    <div class="card-body">
+        <p>The automation will perform the following steps for each invoice in your Excel file:</p>
+        
+        <ol class="list-group list-group-numbered mb-3">
+            <li class="list-group-item">Navigate to the CRM booking list page</li>
+            <li class="list-group-item">Search for the invoice number (with or without "SZ" prefix)</li>
+            <li class="list-group-item">Click on the invoice link to open the details</li>
+            <li class="list-group-item">Click on the "Add Actual Net" button</li>
+            <li class="list-group-item">Set the supplier from your Excel data</li>
+            <li class="list-group-item">Set the actual net cost from your Excel data</li>
+            <li class="list-group-item">Save the changes</li>
+            <li class="list-group-item">Return to the booking list for the next invoice</li>
+        </ol>
+        
+        <p class="mb-0 text-muted">A log file will be created with details of the automation process and any errors encountered.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="p-4 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-4">
+        <h1 class="display-5 fw-bold">Excel to CRM Automation</h1>
+        <p class="col-md-10 fs-4">Automate the process of updating your CRM with data from Excel files.</p>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="/upload" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="/config" class="btn btn-outline-secondary btn-lg">Configure</a>
+            <a href="/generate-package" class="btn btn-success btn-lg">
+                <i class="bi bi-download"></i> Download Complete Package
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-md-stretch">
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-4 bg-body-tertiary border rounded-3">
+            <h2>How It Works</h2>
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent"><span class="step-number">1</span> Upload your Excel file</li>
+                <li class="list-group-item bg-transparent"><span class="step-number">2</span> Map Excel columns to CRM fields</li>
+                <li class="list-group-item bg-transparent"><span class="step-number">3</span> Configure automation settings</li>
+                <li class="list-group-item bg-transparent"><span class="step-number">4</span> Run the automation</li>
+            </ol>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-4 bg-body-tertiary border rounded-3">
+            <h2>Requirements</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent">Excel file (.xlsx or .xls) with invoice data</li>
+                <li class="list-group-item bg-transparent">Google Chrome browser</li>
+                <li class="list-group-item bg-transparent">CRM credentials (must be already logged in)</li>
+                <li class="list-group-item bg-transparent">Invoice data format as specified in the documentation</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Getting Started</h3>
+            </div>
+            <div class="card-body">
+                <p>This tool automates the process of updating invoice records in your CRM system based on data from Excel files.</p>
+                <p>To use this tool:</p>
+                <ol>
+                    <li>Ensure your Excel file contains the necessary columns (Booking No, Supplier, Actual Net Cost)</li>
+                    <li>Make sure you're already logged into your CRM system in a separate Chrome window</li>
+                    <li>Upload your Excel file and follow the steps to configure and run the automation</li>
+                </ol>
+                <p>For detailed instructions, please refer to the <a href="/downloads/README.md">README file</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

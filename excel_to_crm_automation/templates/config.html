@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">CRM Configuration</h4>
+    </div>
+    <div class="card-body">
+        <p>Configure the connection to your CRM system.</p>
+        
+        <form action="/config" method="post" class="mt-4">
+            <div class="mb-3">
+                <label for="crm_url" class="form-label">CRM URL</label>
+                <input type="url" class="form-control" id="crm_url" name="crm_url" 
+                       value="{{ config.crm.url if config.crm and config.crm.url else 'https://mis.bestumrahpackagesuk.com/crm/booking-list' }}" required>
+                <div class="form-text">The URL of your CRM's booking list page</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save Configuration</button>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">Field Mappings</h4>
+    </div>
+    <div class="card-body">
+        <p>These are the current field mappings used to locate elements in the CRM interface.</p>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Locator Type</th>
+                        <th>Locator Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if config.crm and config.crm.field_mappings %}
+                        {% for field, mapping in config.crm.field_mappings.items() %}
+                        <tr>
+                            <td>{{ field }}</td>
+                            <td>{{ mapping.locator_type }}</td>
+                            <td>{{ mapping.locator_value }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center">No field mappings configured</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="alert alert-info mt-3">
+            <p class="mb-0">Field mappings are used by the browser automation to locate elements in the CRM interface. These are automatically configured based on the CRM system structure.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">Local Setup</h4>
+    </div>
+    <div class="card-body">
+        <p>To run this automation tool locally:</p>
+        <ol>
+            <li>Download the complete project files</li>
+            <li>Install the required Python packages</li>
+            <li>Configure your CRM settings</li>
+            <li>Prepare an Excel file with your invoice data</li>
+            <li>Run the automation script</li>
+        </ol>
+        
+        <p>For detailed instructions, refer to the <a href="/downloads/README.md">README file</a>.</p>
+    </div>
+</div>
+{% endblock %}

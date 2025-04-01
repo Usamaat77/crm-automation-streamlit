@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Map Excel Columns to CRM Fields</h4>
+            <span class="badge bg-primary">Step 3 of 4</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>Select the Excel columns that correspond to each CRM field.</p>
+        
+        <form action="/map_columns" method="post" class="mt-4">
+            <div class="mb-3">
+                <label for="invoice_number" class="form-label">Invoice Number (Booking No)</label>
+                <select class="form-select" id="invoice_number" name="invoice_number" required>
+                    <option value="">Select Excel Column</option>
+                    {% for column in columns %}
+                    <option value="{{ column }}" {% if column == default_mapping.invoice_number %}selected{% endif %}>{{ column }}</option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">Excel column that contains the invoice/booking number (with or without "SZ" prefix)</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="supplier" class="form-label">Supplier</label>
+                <select class="form-select" id="supplier" name="supplier" required>
+                    <option value="">Select Excel Column</option>
+                    {% for column in columns %}
+                    <option value="{{ column }}" {% if column == default_mapping.supplier %}selected{% endif %}>{{ column }}</option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">Excel column that contains the supplier name (must match the supplier name in the CRM)</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="actual_net_cost" class="form-label">Actual Net Cost</label>
+                <select class="form-select" id="actual_net_cost" name="actual_net_cost" required>
+                    <option value="">Select Excel Column</option>
+                    {% for column in columns %}
+                    <option value="{{ column }}" {% if column == default_mapping.actual_net_cost %}selected{% endif %}>{{ column }}</option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">Excel column that contains the actual net cost to update in the CRM</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Continue</button>
+            <a href="/excel_details" class="btn btn-outline-secondary">Back</a>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">Field Description</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>CRM Field</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Invoice Number</td>
+                        <td>The invoice or booking number to search for in the CRM. The system will automatically remove the "SZ" prefix if present.</td>
+                        <td>"SZ12345" or "12345"</td>
+                    </tr>
+                    <tr>
+                        <td>Supplier</td>
+                        <td>The supplier name exactly as it appears in the CRM dropdown. Case-sensitive and must match the CRM options.</td>
+                        <td>"Supplier A"</td>
+                    </tr>
+                    <tr>
+                        <td>Actual Net Cost</td>
+                        <td>The actual net cost value to update in the CRM. Can be a number or text that represents a number.</td>
+                        <td>500.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

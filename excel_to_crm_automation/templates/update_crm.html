@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Update CRM - Payment Automation Tool{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('payment_details', payment_id=payment.id) }}" class="btn btn-outline-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Back to Payment Details
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Update CRM with Payment Information</h5>
+            </div>
+            <div class="card-body">
+                <p>The verified payment information will be updated in the CRM system. The system will retrieve the client's email address and download the invoice.</p>
+                
+                <div class="alert alert-info mb-4">
+                    <h6 class="alert-heading">Automated CRM Update</h6>
+                    <p class="mb-0">This step simulates updating a CRM system with the payment information and retrieving the client details. In a real implementation, this would interact with your actual CRM software.</p>
+                </div>
+                
+                <form method="post">
+                    <h6>Verified Payment Details</h6>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Invoice Number</span>
+                            <span class="fw-bold">{{ payment.invoice_number }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Amount</span>
+                            <span class="fw-bold">{% if payment.amount %}${{ "%.2f"|format(payment.amount) }}{% else %}Unknown{% endif %}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Payment Date</span>
+                            <span class="fw-bold">{{ payment.payment_date }}</span>
+                        </li>
+                    </ul>
+                    
+                    <h6>Client Information</h6>
+                    <div class="mb-4">
+                        <label for="client_email" class="form-label">Client Email Address</label>
+                        <input type="email" class="form-control" id="client_email" name="client_email" value="{{ payment.client_email or '' }}" required>
+                        <div class="form-text">This email address will be used to send the payment confirmation.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Update CRM and Retrieve Invoice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">CRM Update Process</h5>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered mb-0">
+                    <li class="list-group-item">Mark invoice as paid in the CRM system</li>
+                    <li class="list-group-item">Record payment details (amount, date, method)</li>
+                    <li class="list-group-item">Retrieve client contact information</li>
+                    <li class="list-group-item">Download invoice PDF for email attachment</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

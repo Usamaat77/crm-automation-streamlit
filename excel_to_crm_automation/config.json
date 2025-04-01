@@ -1,0 +1,70 @@
+{
+  "crm": {
+    "url": "https://mis.bestumrahpackagesuk.com/login",
+    "login": {
+      "username_field": {
+        "type": "xpath",
+        "value": "//input[@name='username']"
+      },
+      "password_field": {
+        "type": "xpath", 
+        "value": "//input[@name='password']"
+      },
+      "login_button": {
+        "type": "xpath",
+        "value": "//button[contains(text(), 'Sign In')]"
+      }
+    },
+    "navigation": {
+      "crm_module": {
+        "type": "xpath",
+        "value": "//h4[text()='Customer Relation Management System']/ancestor::div[contains(@class, 'card')]//a[contains(@class, 'btn') and contains(text(), 'View Module')]"
+      },
+      "booking_list": {
+        "type": "xpath",
+        "value": "//a[contains(text(), 'Bookings List')]"
+      }
+    },
+    "field_mappings": {
+      "invoice_number_search": {
+        "type": "xpath",
+        "value": "//input[@placeholder='Enter Booking Number']"
+      },
+      "search_button": {
+        "type": "xpath",
+        "value": "//button[contains(@class, 'btn-info') and text()='Search']"
+      },
+      "invoice_row": {
+        "type": "xpath",
+        "value": "//table[@id='bookings']//tr[contains(., '{invoice_number}')]//a[contains(@href, '/crm/booking/')]"
+      },
+      "add_actual_net_button": {
+        "type": "xpath",
+        "value": "//a[contains(text(), 'Add Actual Net')]"
+      },
+      "supplier_field": {
+        "type": "name",
+        "value": "supplier_name"
+      },
+      "actual_net_field": {
+        "type": "name",
+        "value": "actual_net"
+      },
+      "save_button": {
+        "type": "xpath",
+        "value": "//button[@type='submit' and contains(text(), 'Save')]"
+      }
+    }
+  },
+  "excel": {
+    "column_mapping": {
+      "invoice_number": "",
+      "supplier": "",
+      "actual_net_cost": ""
+    }
+  },
+  "browser": {
+    "wait_time": 5,
+    "timeout": 15
+  }
+}

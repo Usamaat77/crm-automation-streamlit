@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Excel File Details</h4>
+            <span class="badge bg-primary">Step 2 of 3</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="mb-4">
+            <h5>File Information</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 200px;">Filename</th>
+                            <td>{{ filename }}</td>
+                        </tr>
+                        <tr>
+                            <th>Number of Rows</th>
+                            <td>{{ row_count }}</td>
+                        </tr>
+                        <tr>
+                            <th>Columns</th>
+                            <td>{{ columns|join(', ') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h5>Sample Data (First 5 Rows)</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            {% for col in columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sample_data %}
+                        <tr>
+                            {% for col in columns %}
+                            <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <a href="/map_columns" class="btn btn-primary">Continue to Column Mapping</a>
+        <a href="/upload" class="btn btn-outline-secondary">Upload a Different File</a>
+    </div>
+</div>
+{% endblock %}
